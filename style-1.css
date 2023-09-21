@@ -1,0 +1,62 @@
+body {
+    background-image: repeating-linear-gradient(284deg, transparent 0px, transparent 1px,rgb(251,251,251) 1px, rgb(251,251,251) 3px),repeating-linear-gradient(14deg, transparent 0px, transparent 1px,rgb(251,251,251) 1px, rgb(251,251,251) 3px),linear-gradient(90deg, rgb(222,222,222),rgb(222,222,222));
+    text-align: center;
+    padding: 20px;
+}
+
+header {
+    background-image: linear-gradient(90deg, #e60000, #ffcc00, #00529B); /* Combinación de colores Pokémon */
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.pokemon-card {
+    background-color: #ffcc00; /* Amarillo Pokémon */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+}
+
+.pokemon-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.buy-button {
+    background-color: #008CBA; /* Azul Pokémon */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.back-button {
+    background-color: #e60000; /* Rojo Pokémon */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.back-button:hover, .buy-button:hover {
+    background-color: #00529B; /* Azul más oscuro Pokémon */
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
