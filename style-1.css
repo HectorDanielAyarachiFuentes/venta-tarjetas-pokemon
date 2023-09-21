@@ -1,0 +1,62 @@
+body {
+    background-color: #f5f5f5;
+    text-align: center;
+    padding: 20px;
+}
+
+header {
+    background-color: #e60000;
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.pokemon-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    margin: 20px;
+    text-align: center;
+}
+
+.pokemon-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.buy-button {
+    background-color: #008CBA;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.back-button {
+    background-color: #e60000;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.back-button:hover, .buy-button:hover {
+    background-color: #00529B;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
