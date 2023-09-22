@@ -14,10 +14,11 @@ header {
     padding: 20px 0;
 }
 
-h1 {
+#ramoncito {
     color:blanchedalmond;
-}
+    font-size: 30px;
 
+}
 
 footer {
     background-color: #333;
