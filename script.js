@@ -26,15 +26,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             pokemonContainer.style.display = "grid";
 
-            // Almacena los datos del JSON en localStorage
-            localStorage.setItem("pokemonData", JSON.stringify(data));
-
             // Itera a través de los datos de los Pokémon y los muestra en cascada
             data.data.forEach((pokemonData, index) => {
                 setTimeout(() => {
                     // Crea el elemento de la tarjeta
                     const cardElement = document.createElement("div");
                     cardElement.classList.add("pokemon-card");
+                    if (pokemonData.types && pokemonData.types.length > 0) {
+                        cardElement.dataset.pokemonType = pokemonData.types[0].toLowerCase();
+                    }
 
                     // Crea el contenido HTML con el enlace para ver más detalles
                     // Se agrega loading="lazy" a la imagen para mejorar el rendimiento de carga

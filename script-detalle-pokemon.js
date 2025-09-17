@@ -1,59 +1,125 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Obtén el ID del Pokémon desde la URL
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
+    const pokemonDetailsContainer = document.getElementById("pokemon-details");
+    const jsonURL = "cards-pokemon-1.json";
 
-    // Obtén los datos de Pokémon desde el localStorage
-    const pokemonData = JSON.parse(localStorage.getItem("pokemonData"));
-
-    // Accede al Pokémon seleccionado por su ID
-    const selectedPokemon = pokemonData.data[id];
-
-    // Crea el contenido HTML con la información detallada del Pokémon
-    const detalleHtml = `
-        <div class="pokemon-card">
-            <img src="${selectedPokemon.images.large}" alt="${selectedPokemon.name} Image">
-            <p><strong>Puntos de Salud (HP):</strong> ${selectedPokemon.hp}</p>
-            <p><strong>Ataque:</strong> ${selectedPokemon.attacks[0].name}</p>
-            <p><strong>Descripción:</strong> ${selectedPokemon.flavorText}</p>
-            <p><strong>Precio:</strong> $5.00</p>
-
-            <button class="buy-button">Comprar</button>
-            <a href="index.html" class="back-button">Volver</a>
-
+    // Muestra un loader mientras se cargan los datos
+    pokemonDetailsContainer.innerHTML = `
+        <div class="loader-container">
+            <div class="loader"></div>
         </div>
     `;
 
-    // Muestra los detalles del Pokémon seleccionado en el contenedor correspondiente
-    const pokemonDetails = document.getElementById("pokemon-details");
-    pokemonDetails.innerHTML = detalleHtml;
+    fetch(jsonURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(pokemonData => {
+            if (pokemonData && pokemonData.data[id]) {
+                const selectedPokemon = pokemonData.data[id];
+                
+                const price = getPrice(selectedPokemon);
+                const priceText = price !== 'N/A' ? `$${price}` : 'No disponible';
+
+                const detalleHtml = `
+                    <div class="pokemon-card-detailed">
+                        <div class="card-image">
+                            <img src="${selectedPokemon.images.large}" alt="${selectedPokemon.name} Image">
+                        </div>
+                        <div class="card-info">
+                            <h1>${selectedPokemon.name}</h1>
+                            ${selectedPokemon.flavorText ? `<p class="flavor-text">"${selectedPokemon.flavorText}"</p>` : ''}
+                            
+                            <div class="stats">
+                                <p><strong>HP:</strong> ${selectedPokemon.hp || 'N/A'}</p>
+                                <p><strong>Tipo:</strong> ${selectedPokemon.types ? selectedPokemon.types.join(', ') : 'N/A'}</p>
+                                <p><strong>Rareza:</strong> ${selectedPokemon.rarity || 'N/A'}</p>
+                            </div>
+
+                            ${selectedPokemon.attacks && selectedPokemon.attacks.length > 0 ? `
+                            <div class="attacks">
+                                <h3>Ataques</h3>
+                                ${selectedPokemon.attacks.map(attack => `
+                                    <div class="attack">
+                                        <strong>${attack.name}</strong> (${attack.cost.join(', ')}) | Daño: ${attack.damage || '0'}
+                                        <p>${attack.text}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            ` : ''}
+
+                            <div class="purchase-section">
+                                <p class="price"><strong>Precio:</strong> <span id="unit-price">${priceText}</span></p>
+                                <div class="purchase-controls">
+                                    <label for="quantity">Cantidad:</label>
+                                    <input type="number" id="quantity" min="1" value="1">
+                                    <button class="buy-button" onclick="realizarCompra()">Comprar</button>
+                                </div>
+                            </div>
+
+                            <a href="index.html" class="back-button">‹ Volver al catálogo</a>
+                        </div>
+                    </div>
+                `;
+                pokemonDetailsContainer.innerHTML = detalleHtml;
+            } else {
+                // Manejar el caso en que no se encuentre el Pokémon
+                pokemonDetailsContainer.innerHTML = "<p>No se pudo encontrar la información de la tarjeta. Por favor, vuelve al catálogo.</p>";
+            }
+        })
+        .catch(error => {
+            console.error("Error al cargar los detalles del Pokémon:", error);
+            pokemonDetailsContainer.innerHTML = '<p style="text-align: center; color: red;">Error al cargar los detalles. Inténtalo de nuevo más tarde.</p>';
+        });
 });
 
+function getPrice(pokemon) {
+    if (pokemon.tcgplayer && pokemon.tcgplayer.prices) {
+        const prices = pokemon.tcgplayer.prices;
+        const priceSources = ['holofoil', 'reverseHolofoil', 'normal', '1stEditionHolofoil', 'unlimitedHolofoil'];
+        for (const source of priceSources) {
+            if (prices[source] && prices[source].market) {
+                return prices[source].market.toFixed(2);
+            }
+        }
+    }
+    if (pokemon.cardmarket && pokemon.cardmarket.prices && pokemon.cardmarket.prices.averageSellPrice) {
+        return pokemon.cardmarket.prices.averageSellPrice.toFixed(2);
+    }
+    return 'N/A';
+}
+
 function realizarCompra() {
-    // Obtener la cantidad y el precio
-    const cantidad = parseFloat(document.getElementById('quantity').value);
-    const precioUnitario = parseFloat(document.getElementById('total-price').textContent.replace('$', ''));
+    const priceText = document.getElementById('unit-price').textContent;
+    if (priceText.includes('No disponible')) {
+        window.alert('Esta tarjeta no está disponible para la compra en este momento.');
+        return;
+    }
 
-    // Calcular el precio total
+    const cantidad = parseInt(document.getElementById('quantity').value, 10);
+    const precioUnitario = parseFloat(priceText.replace('$', ''));
+
+    if (isNaN(cantidad) || cantidad < 1) {
+        window.alert('Por favor, introduce una cantidad válida.');
+        return;
+    }
+
     const precioTotal = cantidad * precioUnitario;
-
-    // Dar formato al precio total con dos decimales
     const precioTotalFormateado = precioTotal.toFixed(2);
 
-    // Mostrar una alerta de confirmación
     const confirmacion = window.confirm(`El precio total es: $${precioTotalFormateado}. ¿Deseas realizar la compra?`);
 
     if (confirmacion) {
-        // Cambiar el texto del botón
         const botonCompra = document.querySelector('.buy-button');
         botonCompra.textContent = 'Producto Enviado';
-
-        // Simular el envío del producto (aquí puedes agregar lógica adicional si es necesario)
+        botonCompra.disabled = true;
+        
         setTimeout(() => {
             window.alert('Producto enviado. ¡Gracias por tu compra!');
-        }, 2000); // Simulamos el envío después de 2 segundos
-
-        // Deshabilitar el botón después de la compra
-        botonCompra.disabled = true;
+        }, 1500);
     }
 }

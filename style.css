@@ -1,39 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
 /* Estilos generales */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: repeating-linear-gradient(284deg, transparent 0px, transparent 1px,rgb(251,251,251) 1px, rgb(251,251,251) 3px),repeating-linear-gradient(14deg, transparent 0px, transparent 1px,rgb(251,251,251) 1px, rgb(251,251,251) 3px),linear-gradient(90deg, rgb(222,222,222),rgb(222,222,222));
-
+    background-color: #f4f4f9; /* Un gris muy claro y suave */
+    color: #333;
 }
 
 header {
     background-image: linear-gradient(90deg, #e60000, #ffcc00, #00529B); /* Combinación de colores Pokémon */
-
     text-align: center;
     padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 
 #ramoncito {
-    color:blanchedalmond;
-    font-size: 30px;
-
+    color: white;
+    font-size: 2em; /* Usar em para escalabilidad */
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 footer {
     background-color: #333;
     color: white;
     text-align: center;
-    padding: 10px 0;
+    padding: 20px 0; /* Más padding */
+    margin-top: 40px;
+}
+
+/* Contenedor principal para centrar contenido */
+.main-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
 }
 
 /* Estilos para el contenedor de productos Pokémon */
 .pokemon-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Diseño responsivo */
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Un poco más de ancho mínimo */
+    gap: 25px; /* Un poco más de espacio */
+    padding: 20px 0; /* Padding vertical */
     display: none; /* Ocultar por defecto hasta que carguen los datos */
 }
 
@@ -60,21 +71,49 @@ footer {
 }
 
 .pokemon-card {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 10px;
+    background-color: #fff;
+    border-radius: 15px; /* Bordes más redondeados */
+    padding: 15px;
     text-align: center;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    position: relative; /* Para controlar la posición del botón */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    position: relative;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out; /* Transición para todo */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 2px solid transparent; /* Borde para el hover */
+}
+
+.pokemon-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Colores de borde por tipo de Pokémon */
+.pokemon-card[data-pokemon-type="grass"] { border-color: #78C850; }
+.pokemon-card[data-pokemon-type="fire"] { border-color: #F08030; }
+.pokemon-card[data-pokemon-type="water"] { border-color: #6890F0; }
+.pokemon-card[data-pokemon-type="lightning"] { border-color: #F8D030; }
+.pokemon-card[data-pokemon-type="psychic"] { border-color: #F85888; }
+.pokemon-card[data-pokemon-type="fighting"] { border-color: #C03028; }
+.pokemon-card[data-pokemon-type="darkness"] { border-color: #705848; }
+.pokemon-card[data-pokemon-type="metal"] { border-color: #B8B8D0; }
+.pokemon-card[data-pokemon-type="dragon"] { border-color: #7038F8; }
+.pokemon-card[data-pokemon-type="colorless"] { border-color: #A8A878; }
+
+.pokemon-card h2 {
+    margin: 10px 0;
+    font-size: 1.25em;
+    color: #333;
 }
 
 .pokemon-card img {
     max-width: 100%;
-    height: auto;
-    margin-bottom: 10px; /* Espacio entre la imagen y el botón */
+    height: 250px; /* Altura fija para consistencia */
+    object-fit: contain; /* Asegura que la imagen no se deforme */
+    margin-bottom: 15px;
 }
 
 .pokemon-card.visible {
@@ -82,26 +121,26 @@ footer {
     transform: translateY(0);
 }
 
-.ver-button {
-    background-color: #008CBA;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 10px 20px;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+.ver-button-container {
+    margin-top: auto; /* Empuja el botón hacia abajo */
+    padding-top: 15px;
 }
 
-.pokemon-card:hover {
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+.ver-button {
+    background-color: #3B4CCA; /* Azul Pokémon clásico */
+    color: white;
+    font-size: 1em;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 12px 24px;
+    transition: background-color 0.3s, transform 0.3s;
+    display: inline-block; /* Para que el padding funcione bien */
+    width: 80%;
+    box-sizing: border-box;
 }
 
 .ver-button:hover {
-    background-color: #00529B;
-    transform: translate(-50%, -2px);
-    box-shadow: 0 0 10px #00529B;
+    background-color: #FFDE00; /* Amarillo Pokémon */
+    color: #3B4CCA;
+    transform: scale(1.05);
 }
